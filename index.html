@@ -1,0 +1,300 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Sinaliza Desmontado</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Layout: palco 3D em cima, painel de controle e ficha da peça ao lado (desktop) ou embaixo (celular). Mesa de oficina escolar: papelão, letra de mão, luzes do semáforo. Tema único escuro. */
+:root{
+  --bg:#17130f; --stage:#211b15; --panel:#2a2219; --line:#3d3226;
+  --fg:#f2e9dc; --muted:#a8977f; --kraft:#c99c62;
+  --green:#2fbf5b; --yellow:#f3c623; --red:#e5373a;
+  --hand:"Patrick Hand","Comic Neue",cursive;
+  --body:"Nunito Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:16px}
+header h1{font-family:var(--hand);font-weight:400;font-size:clamp(2rem,6vw,3rem);line-height:1;margin:0;letter-spacing:.02em;text-wrap:balance}
+header h1 span{color:var(--kraft)}
+header p{margin:6px 0 0;color:var(--muted);max-width:64ch}
+.main{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){.main{grid-template-columns:minmax(0,1fr) 350px}}
+.stage{position:relative;background:radial-gradient(ellipse at 50% 35%,#33291f 0%,var(--stage) 72%);border:1px solid var(--line);border-radius:14px;overflow:hidden;height:min(62vh,560px);min-height:340px;touch-action:none}
+.stage canvas{display:block;width:100%;height:100%}
+.labels{position:absolute;inset:0;pointer-events:none}
+.lbl{position:absolute;font-family:var(--mono);font-size:11px;color:var(--fg);white-space:nowrap;transform:translate(8px,-50%);padding:2px 6px;border-left:2px solid var(--kraft);background:rgba(23,19,15,.75)}
+.lbl.sel{border-color:var(--yellow);color:var(--yellow)}
+.hint{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+aside{display:grid;gap:16px;align-content:start;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px}
+.eyebrow{font-family:var(--body);font-weight:700;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+button{font:600 14px var(--body);color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer}
+button:hover{border-color:var(--kraft)}
+button.primary{background:var(--kraft);color:#20170d;border-color:var(--kraft)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+.sig{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.sig button{display:flex;align-items:center;gap:8px;padding:8px 10px;font-size:13px;text-align:left}
+.sig button[aria-pressed=true]{border-color:var(--fg);background:#352b20}
+.bulb{width:12px;height:12px;border-radius:50%;flex:none}
+.slider{display:grid;gap:4px}
+.slider label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.slider output{font-family:var(--mono);color:var(--fg);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--kraft)}
+.parts{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.parts button{width:100%;text-align:left;border:none;border-radius:6px;padding:6px 8px;display:flex;gap:10px;align-items:center;font-weight:400}
+.parts button:hover{background:#352b20}
+.parts button[aria-pressed=true]{background:#352b20;color:var(--yellow)}
+.dot{width:10px;height:10px;border-radius:3px;flex:none}
+#info h2{font-family:var(--hand);font-weight:400;font-size:1.6rem;line-height:1.1;margin:0}
+#info p{margin:0;color:#e0d4c3}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}
+dt{color:var(--muted)}
+dd{margin:0;font-family:var(--mono);font-size:12.5px}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1><span>SINALIZA</span> por dentro</h1>
+    <p>O sinal sonoro da escola vira luz colorida. Separe as peças, gire o modelo e toque em cada parte para ver a física que ela usa.</p>
+  </header>
+  <div class="main">
+    <div class="stage" id="stage">
+      <div class="labels" id="labels"></div>
+      <div class="hint">arraste para girar · pinça para zoom</div>
+    </div>
+    <aside>
+      <div class="card">
+        <div class="eyebrow">Vista explodida</div>
+        <div class="row">
+          <button class="primary" id="btnOpen">Desmontar</button>
+          <button id="btnClose">Montar</button>
+        </div>
+        <div class="slider">
+          <label for="explode">Separação <output id="pct">0%</output></label>
+          <input type="range" id="explode" min="0" max="100" value="0">
+        </div>
+        <div class="eyebrow">Simular aviso</div>
+        <div class="sig" id="sig">
+          <button type="button" id="sig-0" data-s="0"><span class="bulb" style="background:var(--green)"></span>Início / fim</button>
+          <button type="button" id="sig-1" data-s="1"><span class="bulb" style="background:var(--yellow)"></span>Recreio</button>
+          <button type="button" id="sig-2" data-s="2"><span class="bulb" style="background:var(--red)"></span>Emergência</button>
+          <button type="button" id="sig-3" data-s="3" aria-pressed="true"><span class="bulb" style="background:linear-gradient(90deg,var(--green),var(--yellow),var(--red))"></span>Todas acesas</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Peças</div>
+        <ul class="parts" id="partList"></ul>
+        <p class="note">Os componentes internos mostram uma montagem típica para esse tipo de protótipo. Ajuste os nomes e valores para o que foi usado de fato.</p>
+      </div>
+      <div class="card" id="info" aria-live="polite"></div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(document.fonts?Promise.race([document.fonts.load("40px 'Patrick Hand'"),new Promise(r=>setTimeout(r,2500))]).catch(()=>{}):Promise.resolve()).then(function(){
+const PARTS=[
+ {nome:"Placa de identificação",cor:"#c99c62",off:[0,1.5,0],
+  txt:"Dá nome ao projeto e resume a ideia. Fica no alto para ser vista de longe na sala.",
+  dados:[["Material","papelão ondulado"],["Função","identidade visual"]]},
+ {nome:"Domos difusores",cor:"#f3c623",off:[0,0,3.6],
+  txt:"A luz do LED sai concentrada num ponto. O domo de plástico espalha essa luz por refração e reflexão interna, e o aviso fica visível de vários ângulos.",
+  dados:[["Material","acrílico translúcido"],["Física","refração e difusão"]]},
+ {nome:"Painel com legendas",cor:"#e8d3b0",off:[0,0,2.4],
+  txt:"Cada luz tem cor e texto. Essa dupla codificação garante que pessoas com daltonismo também entendam o aviso.",
+  dados:[["Verde","início ou fim da aula"],["Amarelo","recreio"],["Vermelho","alerta de emergência"]]},
+ {nome:"LEDs e resistores",cor:"#e5373a",off:[0,0,1.25],
+  txt:"O LED é um diodo semicondutor. A cor da luz depende da energia do gap do material: quanto maior o gap, menor o comprimento de onda. O resistor limita a corrente para não queimar o LED.",
+  dados:[["Vermelho","≈ 625 nm · 2,0 V"],["Amarelo","≈ 590 nm · 2,1 V"],["Verde","≈ 525 nm · 3,0 V"],["Resistor","(5 − 2) V ÷ 20 mA = 150 Ω"]]},
+ {nome:"Microcontrolador",cor:"#2d6fd1",off:[0,-0.2,0.55],
+  txt:"Lê o sinal do microfone e decide qual luz acender. Pode diferenciar os avisos pela quantidade ou pela duração dos toques do sinal da escola.",
+  dados:[["Exemplo","Arduino Nano"],["Tensão","5 V"],["Clock","16 MHz"]]},
+ {nome:"Caixa (corpo)",cor:"#b98f5e",off:[0,0,-0.7],
+  txt:"Estrutura de papelão que segura os componentes. É leve, barata e fácil de recortar para encaixar as luzes.",
+  dados:[["Material","papelão ondulado"],["Vantagem","isolante elétrico"]]},
+ {nome:"Módulo de som",cor:"#3a3a3a",off:[1.7,0,0],
+  txt:"O microfone capta o sinal da escola. A onda sonora é uma variação de pressão do ar que faz vibrar uma membrana, e essa vibração vira um sinal de tensão elétrica. A chave liga e desliga o protótipo.",
+  dados:[["Sensor","microfone de eletreto"],["Audição humana","20 Hz a 20 kHz"],["Sirene escolar","≈ 90 dB"]]},
+ {nome:"Suporte de pilhas",cor:"#151515",off:[3.0,-0.1,0.3],
+  txt:"Fornece a energia do circuito. As pilhas em série somam as tensões: quatro pilhas de 1,5 V dão 6 V.",
+  dados:[["Pilhas","4 × AA em série"],["Tensão","6 V"],["Física","energia química → elétrica"]]}
+];
+const N=PARTS.length;
+const BW=5.2,BH=2.6,BD=2.4;           // caixa
+const LX=[-1.65,0,1.65],LY=0.35;      // luzes
+const LCOL=["#2fbf5b","#f3c623","#e5373a"];
+
+const stage=document.getElementById("stage");
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+stage.prepend(renderer.domElement);
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(35,1,0.1,100);
+camera.position.set(6,4.5,13);
+const controls=new THREE.OrbitControls(camera,renderer.domElement);
+controls.target.set(1,0.4,0.6);
+controls.enableDamping=true;controls.enablePan=false;controls.minDistance=7;controls.maxDistance=26;
+
+scene.add(new THREE.HemisphereLight(0xfff3e0,0x2a2016,0.95));
+const key=new THREE.DirectionalLight(0xffffff,0.8);key.position.set(6,9,8);scene.add(key);
+const fill=new THREE.DirectionalLight(0xffd9a0,0.3);fill.position.set(-7,2,-4);scene.add(fill);
+
+// texturas de papelão
+function kraftCanvas(w,h){const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");
+ x.fillStyle="#c39661";x.fillRect(0,0,w,h);
+ for(let i=0;i<w*h/60;i++){x.fillStyle="rgba("+(Math.random()<.5?"90,60,30":"230,200,150")+","+(Math.random()*.08)+")";x.fillRect(Math.random()*w,Math.random()*h,Math.random()*6+1,1);}
+ return [c,x];}
+const kraftTex=new THREE.CanvasTexture(kraftCanvas(256,256)[0]);kraftTex.wrapS=kraftTex.wrapT=THREE.RepeatWrapping;
+function kraft(){return new THREE.MeshStandardMaterial({map:kraftTex,color:0xffffff,roughness:.95});}
+function mat(c,o={}){return new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.5,metalness:.1},o));}
+function box(w,h,d,m,x=0,y=0,z=0){const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);b.position.set(x,y,z);return b;}
+
+const groups=PARTS.map((p,i)=>{const g=new THREE.Group();scene.add(g);return g;});
+
+// 0 placa
+{const [c,x]=kraftCanvas(720,280);
+ x.fillStyle="#1d1712";x.textAlign="center";x.font="130px 'Patrick Hand', cursive";x.fillText("SINALIZA",360,150);
+ x.lineWidth=7;x.strokeStyle="#1d1712";x.lineCap="round";
+ [[70,100,30,85],[60,150,20,150],[70,200,30,215],[650,100,690,85],[660,150,700,150],[650,200,690,215]].forEach(l=>{x.beginPath();x.moveTo(l[0],l[1]);x.lineTo(l[2],l[3]);x.stroke();});
+ x.font="38px 'Patrick Hand', cursive";x.fillText("sinais sonoros que viram luz ♥",360,235);
+ const t=new THREE.CanvasTexture(c);
+ const m=[kraft(),kraft(),kraft(),kraft(),new THREE.MeshStandardMaterial({map:t,roughness:.95}),kraft()];
+ const s=new THREE.Mesh(new THREE.BoxGeometry(3.6,1.4,0.1),m);s.position.set(-0.2,BH/2+0.72,0.2);groups[0].add(s);}
+
+// 1 domos
+const domes=[];
+LX.forEach((lx,i)=>{const bez=new THREE.Mesh(new THREE.TorusGeometry(0.5,0.08,12,40),mat("#2b2b2b",{roughness:.3}));bez.position.set(lx,LY,BD/2+0.06);groups[1].add(bez);
+ const g=new THREE.SphereGeometry(0.46,40,20,0,Math.PI*2,0,Math.PI/2);
+ const dm=new THREE.MeshStandardMaterial({color:LCOL[i],emissive:LCOL[i],emissiveIntensity:1,transparent:true,opacity:.92,roughness:.25});
+ const d=new THREE.Mesh(g,dm);d.rotation.x=Math.PI/2;d.scale.set(1,0.55,1);d.position.set(lx,LY,BD/2+0.05);groups[1].add(d);domes.push(dm);});
+
+// 2 painel frontal
+{const PW=BW-0.06,PH=BH-0.06;const [c,x]=kraftCanvas(1040,520);
+ const sx=v=>(v+PW/2)/PW*1040, sy=v=>(PH/2-v)/PH*520;
+ LX.forEach((lx,i)=>{x.fillStyle="#3a2c1d";x.beginPath();x.arc(sx(lx),sy(LY),104,0,Math.PI*2);x.fill();
+  const labs=[["Início / Fim","da aula"],["Recreio",""],["Alerta de","emergência"]];
+  x.fillStyle=["#3ccf6a","#f6dd3a","#ef4f63"][i];const lw=150,lh=88;x.fillRect(sx(lx)-lw,sy(-0.75)-lh,lw*2,lh*2);
+  x.fillStyle="#1d1712";x.textAlign="center";x.font="54px 'Patrick Hand', cursive";
+  if(labs[i][1]){x.fillText(labs[i][0],sx(lx),sy(-0.75)-8);x.fillText(labs[i][1],sx(lx),sy(-0.75)+50);}else x.fillText(labs[i][0],sx(lx),sy(-0.75)+18);});
+ const t=new THREE.CanvasTexture(c);
+ const front=new THREE.MeshStandardMaterial({map:t,roughness:.95});
+ const p=new THREE.Mesh(new THREE.BoxGeometry(PW,PH,0.06),[kraft(),kraft(),kraft(),kraft(),front,kraft()]);p.position.set(0,0,BD/2);groups[2].add(p);}
+
+// 3 LEDs e resistores
+{groups[3].add(box(4.4,0.7,0.05,mat("#2f6b3a",{roughness:.7}),0,LY,BD/2-0.45));
+ const leds=[];
+ LX.forEach((lx,i)=>{const body=new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.12,0.22,24),new THREE.MeshStandardMaterial({color:LCOL[i],emissive:LCOL[i],emissiveIntensity:1,transparent:true,opacity:.95}));
+  body.rotation.x=Math.PI/2;body.position.set(lx,LY,BD/2-0.3);groups[3].add(body);leds.push(body.material);
+  const tip=new THREE.Mesh(new THREE.SphereGeometry(0.12,20,10),body.material);tip.position.set(lx,LY,BD/2-0.19);groups[3].add(tip);
+  const r=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,0.3,12),mat("#d8c59a"));r.rotation.z=Math.PI/2;r.position.set(lx+0.45,LY,BD/2-0.42);groups[3].add(r);
+  [[-0.08,"#6b3a1f"],[0,"#2a8f3a"],[0.08,"#6b3a1f"]].forEach(([dx,cc])=>{const band=new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.055,0.03,12),mat(cc));band.rotation.z=Math.PI/2;band.position.set(lx+0.45+dx,LY,BD/2-0.42);groups[3].add(band);});});
+ groups[3].userData.leds=leds;}
+
+// 4 microcontrolador
+{groups[4].add(box(1.7,0.06,0.65,mat("#1f5fb8",{roughness:.6}),0.2,-BH/2+0.45,-0.1));
+ groups[4].add(box(0.45,0.06,0.45,mat("#1a1a1a"),0.25,-BH/2+0.51,-0.1));
+ groups[4].add(box(0.3,0.16,0.3,mat("#b8bec6",{metalness:.8,roughness:.3}),-0.55,-BH/2+0.56,-0.1));
+ for(let k=0;k<12;k++){[-0.27,0.07].forEach(dz=>groups[4].add(box(0.05,0.12,0.05,mat("#222"),-0.45+k*0.12,-BH/2+0.54,-0.1+dz*1.0+(dz>0?0.15:0))));}
+ groups[4].add(box(0.12,0.04,0.08,mat("#ffd36b",{emissive:"#7a5a10"}),0.75,-BH/2+0.5,0.05));}
+
+// 5 caixa (sem a frente)
+{const k=kraft(),T=0.06;
+ groups[5].add(box(BW,BH,T,k,0,0,-BD/2+T/2));
+ groups[5].add(box(BW,T,BD,k,0,BH/2-T/2,0));
+ groups[5].add(box(BW,T,BD,k,0,-BH/2+T/2,0));
+ groups[5].add(box(T,BH,BD,k,-BW/2+T/2,0,0));
+ groups[5].add(box(T,BH,BD,k,BW/2-T/2,0,0));}
+
+// 6 módulo de som
+let micMat;
+{const mx=BW/2+0.5;
+ groups[6].add(box(0.95,2.0,1.0,kraft(),mx,-0.25,0.3));
+ groups[6].add(box(0.22,0.38,0.08,mat("#111"),mx,0.45,0.84));
+ groups[6].add(box(0.1,0.16,0.06,mat("#333"),mx,0.52,0.9));
+ const [c,x]=[document.createElement("canvas"),null];c.width=c.height=256;const cx=c.getContext("2d");
+ cx.fillStyle="#1c1c1c";cx.fillRect(0,0,256,256);cx.fillStyle="#050505";
+ for(let r=0;r<5;r++){const n=r?r*6:1;for(let j=0;j<n;j++){const a=j/n*Math.PI*2;cx.beginPath();cx.arc(128+Math.cos(a)*r*22,128+Math.sin(a)*r*22,7,0,Math.PI*2);cx.fill();}}
+ micMat=new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(c),roughness:.6,emissive:"#000"});
+ const mic=new THREE.Mesh(new THREE.CylinderGeometry(0.62,0.62,0.3,40),[mat("#1c1c1c"),micMat,mat("#1c1c1c")]);
+ mic.rotation.x=Math.PI/2;mic.position.set(mx-0.05,-0.35,0.95);groups[6].add(mic);
+ const [lc,lx]=kraftCanvas(256,110);lx.fillStyle="#f4f1ea";lx.fillRect(10,10,236,90);lx.fillStyle="#1d1712";lx.textAlign="center";lx.font="34px 'Patrick Hand', cursive";lx.fillText("Sinal sonoro",128,50);lx.fillText("da escola",128,86);
+ const tag=new THREE.Mesh(new THREE.PlaneGeometry(0.9,0.39),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(lc)}));tag.position.set(mx,-1.05,0.81);groups[6].add(tag);}
+
+// 7 pilhas
+{const bx=BW/2+2.1,by=-BH/2+0.33;
+ groups[7].add(box(1.5,0.66,1.1,mat("#141414",{roughness:.5}),bx,by,0.4));
+ groups[7].add(box(1.3,0.04,0.9,mat("#1e1e1e"),bx,by+0.35,0.4));
+ groups[7].add(box(0.2,0.12,0.06,mat("#333"),bx+0.4,by,0.97));
+ [["#c62828",0.12],["#111",-0.02]].forEach(([c,dz])=>{const path=new THREE.CatmullRomCurve3([new THREE.Vector3(bx-0.6,by+0.2,0.4+dz),new THREE.Vector3(bx-1.2,by+0.6,0.5+dz),new THREE.Vector3(bx-1.6,by+1.4,0.3+dz)]);
+  groups[7].add(new THREE.Mesh(new THREE.TubeGeometry(path,24,0.025,8),mat(c)));});}
+
+groups.forEach((g,i)=>g.traverse(o=>{if(o.isMesh)o.userData.part=i;}));
+
+// UI
+const list=document.getElementById("partList"),labels=document.getElementById("labels"),info=document.getElementById("info");
+const lblEls=PARTS.map(p=>{const d=document.createElement("div");d.className="lbl";d.textContent=p.nome;labels.appendChild(d);return d;});
+const btns=PARTS.map((p,i)=>{const li=document.createElement("li");const b=document.createElement("button");b.type="button";b.id="part-"+i;
+ b.innerHTML='<span class="dot" style="background:'+p.cor+'"></span>'+p.nome;b.onclick=()=>select(i,true);li.appendChild(b);list.appendChild(li);return b;});
+let target=0,t=0,sel=-1;
+function select(i,open){sel=i;const p=PARTS[i];
+ btns.forEach((b,k)=>b.setAttribute("aria-pressed",k===i));lblEls.forEach((l,k)=>l.classList.toggle("sel",k===i));
+ info.innerHTML='<div class="eyebrow">Peça '+(i+1)+' de '+N+'</div><h2>'+p.nome+'</h2><p>'+p.txt+'</p><dl>'+p.dados.map(d=>'<dt>'+d[0]+'</dt><dd>'+d[1]+'</dd>').join("")+'</dl>';
+ if(open&&target<0.4)target=1;}
+select(6,false);
+
+const slider=document.getElementById("explode"),pct=document.getElementById("pct");
+slider.addEventListener("input",()=>{target=slider.value/100;});
+document.getElementById("btnOpen").onclick=()=>{target=1;};
+document.getElementById("btnClose").onclick=()=>{target=0;};
+
+// simulação de sinal
+let mode=3,modeStart=performance.now();
+document.querySelectorAll("#sig button").forEach(b=>b.onclick=()=>{mode=+b.dataset.s;modeStart=performance.now();
+ document.querySelectorAll("#sig button").forEach(o=>o.setAttribute("aria-pressed",o===b));});
+
+const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();let down=null;
+renderer.domElement.addEventListener("pointerdown",e=>{down=[e.clientX,e.clientY];});
+renderer.domElement.addEventListener("pointerup",e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5)return;
+ const r=renderer.domElement.getBoundingClientRect();mouse.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
+ ray.setFromCamera(mouse,camera);const hit=ray.intersectObjects(groups,true).find(h=>h.object.userData.part!==undefined);
+ if(hit)select(hit.object.userData.part,false);});
+
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+new ResizeObserver(resize).observe(stage);resize();
+
+// âncoras dos rótulos (em coordenadas do grupo montado)
+const ANCH=[[1.6,BH/2+1.2,0.2],[LX[2]+0.5,LY+0.4,BD/2],[BW/2-0.2,BH/2-0.2,BD/2],[2.2,LY+0.35,BD/2-0.4],[1.05,-BH/2+0.5,-0.1],[BW/2,BH/2,-BD/2],[BW/2+0.98,0.75,0.3],[BW/2+2.85,-BH/2+0.66,0.4]];
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const v=new THREE.Vector3();
+function loop(now){
+ t+=(target-t)*(reduce?1:0.07);if(Math.abs(target-t)<0.001)t=target;
+ if(document.activeElement!==slider)slider.value=Math.round(t*100);
+ pct.textContent=Math.round(t*100)+"%";
+ const e=t*t*(3-2*t);
+ groups.forEach((g,i)=>{const o=PARTS[i].off;g.position.set(o[0]*e,o[1]*e,o[2]*e);});
+ // luzes
+ const dt=(now-modeStart)/1000;
+ const on=[0,1,2].map(i=>{if(mode===3)return 1;if(i!==mode)return 0.04;
+  if(mode===2)return reduce?1:(Math.sin(dt*10)>0?1:0.15);return 1;});
+ const mic=mode===3?0:Math.max(0,1-dt/1.2);
+ domes.forEach((m,i)=>{m.emissiveIntensity=on[i];m.opacity=0.55+0.4*on[i];});
+ groups[3].userData.leds.forEach((m,i)=>m.emissiveIntensity=on[i]);
+ micMat.emissive.setRGB(mic*.35,mic*.3,mic*.1);
+ controls.update();renderer.render(scene,camera);
+ const w=stage.clientWidth,h=stage.clientHeight;
+ groups.forEach((g,i)=>{v.fromArray(ANCH[i]).add(g.position).project(camera);
+  const el=lblEls[i];el.style.left=((v.x+1)/2*w)+"px";el.style.top=((1-v.y)/2*h)+"px";el.style.opacity=Math.max(0,Math.min(1,(e-0.35)/0.3));});
+ requestAnimationFrame(loop);}
+requestAnimationFrame(loop);
+setTimeout(()=>{target=1;},800);
+});
+</script>
+
+</body></html>
